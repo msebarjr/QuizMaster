@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import { cn } from '@/lib/utils'
 
 // Custom Components
-import Navbar from './components/Navbar'
+import Navbar from '../components/Navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 

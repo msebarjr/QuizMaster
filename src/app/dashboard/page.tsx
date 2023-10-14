@@ -7,6 +7,10 @@ import { QuizMeCard, HistoryCard, HotTopicsCard, RecentActivityCard } from '@/co
 
 type Props = {}
 
+export const metadata = {
+  title: 'QuizMaster | Dashboard'
+}
+
 const Dashboard = async (props: Props) => {
   const session = await getAuthSession()
 

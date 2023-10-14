@@ -45,4 +45,40 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Quiz          Quiz[]
+}
+
+enum QuizType {
+  mcq
+  open_ended
+}
+
+// Quiz has 1 User and User has many games
+model Quiz {
+  id          String     @id @default(cuid())
+  userId      String
+  timeStarted DateTime
+  timeEnded   DateTime?
+  quizType    QuizType
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade) // Links Quiz Model to User via relation field
+  questions   Question[]
+
+  @@index([userId], name: "userId")
+}
+
+// Qame has many questions but each question only 1 Quiz
+model Question {
+  id             String   @id @default(cuid())
+  question       String
+  answer         String
+  quizId         String
+  options        Json? // only for mcq - array
+  isCorrect      Boolean? // only for mcq
+  percentCorrect Float? // only for open_ended
+  questionType   QuizType
+  userAnswer     String?
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId], name: "quizId")
 }

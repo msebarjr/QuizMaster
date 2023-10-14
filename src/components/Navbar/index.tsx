@@ -2,9 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import { getAuthSession } from '@/lib/nextauth'
 
-// shadcn Components
-import { LoginButton } from '../../components/Buttons'
+// Custom Components
+import { LoginButton } from '../Buttons'
 import UserAccount from '../User/UserDropdown'
+import ThemeToggle from '../ThemeToggle'
 
 type Props = {}
 
@@ -20,7 +21,11 @@ const Navbar = async (props: Props) => {
           <p className='rounded-lg border-2 border-b-4 border-r-4 border-black px-2 py-1 text-xl font-bold transition-all hover:-translate-y-[2px] md:block dark:border-white '>QuizMaster</p>
         </Link>
         <div className="flex items-center">
-          {session?.user ? <UserAccount user={session.user} /> : <LoginButton text='Login' />}</div>
+          <ThemeToggle className='mr-4'/>
+          <div className="flex items-center">
+            {session?.user ? <UserAccount user={session.user} /> : <LoginButton text='Login' />}
+          </div>
+        </div>
       </div>
     </div>
   )

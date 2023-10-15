@@ -53,11 +53,12 @@ enum QuizType {
   open_ended
 }
 
-// Quiz has 1 User and User has many games
+// Quiz has 1 User and User has many quizzes
 model Quiz {
   id          String     @id @default(cuid())
   userId      String
   timeStarted DateTime
+  topic       String
   timeEnded   DateTime?
   quizType    QuizType
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade) // Links Quiz Model to User via relation field

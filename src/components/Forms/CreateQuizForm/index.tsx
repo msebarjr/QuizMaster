@@ -1,9 +1,12 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import axios from 'axios'
 
 // Icons
 import { CopyCheck, BookOpen } from 'lucide-react'
@@ -31,6 +34,18 @@ type Props = {}
 type Input = z.infer<typeof quizSchema>
 
 const CreateQuizForm = (props: Props) => {
+  const router = useRouter()
+  const {mutate: getQuestions, isLoading} = useMutation({
+    mutationFn: async ({amount, topic, type}: Input) => {
+      const response = await axios.post('/api/quiz', {
+        amount,
+        topic,
+        type,
+      })
+      return response.data
+    }
+  })
+  
   const form = useForm<Input>({
     resolver: zodResolver(quizSchema),
     defaultValues: {
@@ -41,7 +56,19 @@ const CreateQuizForm = (props: Props) => {
   })
 
   const onSubmit = (input: Input) => {
-    alert(JSON.stringify(input, null, 2))
+    getQuestions({
+      amount: input.amount,
+      topic: input.topic,
+      type: input.type
+    }, {
+      onSuccess: ({quizId}) => {
+        if (form.getValues("type") == "open_ended") {
+          router.push(`/play/open-ended/${quizId}`)
+        } else {
+          router.push(`/play/mcq/${quizId}`)
+        } 
+      }
+    })
   }
 
   const onInputChange = (e: any) => {
@@ -106,7 +133,7 @@ const CreateQuizForm = (props: Props) => {
                   <BookOpen className='w-4 h-4 mr-2' />Open Ended
                 </Button>
               </div>
-              <Button type="submit">Submit</Button>
+              <Button disabled={isLoading} type="submit">Submit</Button>
             </form>
           </Form>
         </CardContent>

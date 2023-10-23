@@ -1,13 +1,12 @@
 // /api/quiz
-
-import { getAuthSession } from '@/lib/nextauth'
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/db'
 import axios from 'axios';
+import { getAuthSession } from '@/lib/nextauth';
 
 // Schema
 import { quizSchema } from '@/schemas/form/quiz'
-import { ZodError } from 'zod'
-import { prisma } from '@/lib/db'
+import { z } from 'zod'
 
 type mcqQuestion = {
   question: string,
@@ -24,15 +23,15 @@ type openQuestion = {
 
 export const POST = async (req: Request, res: Response) => {
   try {
-    const session = await getAuthSession()
+    // const session = await getAuthSession()
 
-    if (!session?.user) {
-      return NextResponse.json({
-        error: 'You must be logged in!'
-      }, {
-        status: 401
-      })
-    }
+    // if (!session?.user) {
+    //   return NextResponse.json({
+    //     error: 'You must be logged in to create a quiz!'
+    //   }, {
+    //     status: 401
+    //   })
+    // }
 
     const body = await req.json()
     const { amount, topic, type } = quizSchema.parse(body)
@@ -41,21 +40,26 @@ export const POST = async (req: Request, res: Response) => {
       data: {
         quizType: type,
         timeStarted: new Date(),
-        userId: session.user.id,
+        userId: 'clnpa3e1a0000w4544y0070z7',
         topic,     
       }
     })
+
+    let config = {
+      headers: {
+        Authorization: process.env.OPENAI_API_KEY
+      }
+    }
 
     const {data} = await axios.post(`${process.env.API_URL}/api/questions`, {
       amount,
       topic,
       type
-    })
+    }, config)
 
     if (type === 'mcq') {
       let quizData = data.questions.map((question: mcqQuestion) => {
-        let options = [question.answer, question.option1, question.option2, question.option3]
-        options = options.sort(() => Math.random() - 0.5)
+        const options = [question.answer, question.option1, question.option2, question.option3].sort(() => Math.random() - 0.5)
 
         return {
           question: question.question,
@@ -70,7 +74,7 @@ export const POST = async (req: Request, res: Response) => {
         data: quizData
       })
     } else if (type === 'open_ended') {
-      let quizData = data.questions.map((question: mcqQuestion) => {
+      let quizData = data.questions.map((question: openQuestion) => {
         return {
           question: question.question,
           answer: question.answer,
@@ -84,17 +88,9 @@ export const POST = async (req: Request, res: Response) => {
       })
     }
 
-    return NextResponse.json({
-      quizId: quiz.id
-    })
+    return NextResponse.json({quizId: quiz.id}, {status: 200})
 
   } catch (error) {
-    if (error instanceof ZodError) {
-      return NextResponse.json({error: error.issues}, {status: 400})
-    }
-
-    return NextResponse.json({
-      error: 'Something went wrong!'
-    }, { status: 500})
-  }
+    if (error instanceof z.ZodError) return NextResponse.json({error: error.issues}, {status: 400})
+    else return NextResponse.json({error: 'Something went wrong!'}, { status: 500 })}
 }

@@ -24,7 +24,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId], name: "userId")
+  @@index([userId])
 }
 
 model Session {
@@ -34,7 +34,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId], name: "userId")
+  @@index([userId])
 }
 
 model User {
@@ -45,4 +45,41 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  quiz          Quiz[]
+}
+
+enum QuizType {
+  mcq
+  open_ended
+}
+
+// Quiz has 1 User and User has many quizzes
+model Quiz {
+  id          String     @id @default(cuid())
+  userId      String
+  questions   Question[]
+  timeStarted DateTime
+  topic       String
+  timeEnded   DateTime?
+  quizType    QuizType
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade) // Links Quiz Model to User via relation field
+
+  @@index([userId])
+}
+
+// Qame has many questions but each question only 1 Quiz
+model Question {
+  id                String   @id @default(cuid())
+  question          String
+  answer            String
+  quizId            String
+  options           Json? // only for mcq - array
+  isCorrect         Boolean? // only for mcq
+  percentageCorrect Float? // only for open_ended
+  questionType      QuizType
+  userAnswer        String?
+
+  quiz Quiz @relation(fields: [quizId], references: [id])
+
+  @@index([quizId])
 }

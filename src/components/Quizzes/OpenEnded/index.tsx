@@ -108,7 +108,10 @@ const OpenEnded = ({quiz}: Props) => {
         <div className="px-4 py-2 mt-2 font-semibold text-white bg-green-500 rounded-md whitespace-nowrap">
           You completed in {formatTimeDelta(differenceInSeconds(currentTime, quiz.timeStarted))}
         </div>
-        <Link href={`/statistics/${quiz.id}`} className={cn(buttonVariants(), 'mt-2')}>View Statistics <BarChart className='w-4 h-4 ml-2' /></Link>
+        <Link href={`/statistics/${quiz.id}`} className={cn(buttonVariants({size: 'lg'}), 'mt-2')}>
+          View Statistics
+          <BarChart className='w-4 h-4 ml-2' />
+        </Link>
       </div>
     )
   }

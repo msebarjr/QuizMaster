@@ -10,7 +10,7 @@ import { prisma } from '@/lib/db'
 import { buttonVariants } from '@/components/ui/button'
 
 // Custom Components
-import { ResultsCard } from '@/components/Cards'
+import { AccuracyCard, ResultsCard, TimeTakenCard } from '@/components/Cards'
 
 // Icons
 import { LucideLayoutDashboard } from 'lucide-react'
@@ -27,10 +27,31 @@ const StatisticsPage = async ({params: {quizId}}: Props) => {
   if (!session?.user) return redirect('/')
 
   const quiz = await prisma.quiz.findUnique({
-    where: { id: quizId }
+    where: { id: quizId },
+    include: { questions: true }
   })
 
   if (!quiz) return redirect('/quiz')
+
+  let accuracy: number = 0
+
+  if (quiz.quizType === 'mcq') {
+    let totalCorrect = quiz.questions.reduce((acc, question) => {
+      if (question.isCorrect) return acc + 1
+
+      return acc
+    }, 0)
+
+    accuracy = (totalCorrect / quiz.questions.length) * 100
+  } else if (quiz.quizType === 'open_ended') {
+    let totalPercentage = quiz.questions.reduce((acc, question) => {
+      return acc + (question.percentageCorrect || 0)
+    }, 0)
+
+    accuracy = totalPercentage / quiz.questions.length 
+  }
+
+  accuracy = Math.round(accuracy * 100) / 100
 
   return (
     <>
@@ -45,12 +66,15 @@ const StatisticsPage = async ({params: {quizId}}: Props) => {
           </div>
         </div>
 
-        <div className='grid gap-4 mt-4 md:grid-cols-7'>
-          {/* Results Card */}
-          <ResultsCard accuracy={55} />
-          {/* Accuracy Card */}
-          {/* Time Taken Card */}
+        <div className='grid gap-4 mt-4 md:grid-cols-7'>          
+          <ResultsCard accuracy={accuracy} />          
+          <AccuracyCard accuracy={accuracy} />
+
+          {/* Fix Time Ended */}
+          <TimeTakenCard timeEnded={new Date()} timeStarted={quiz.timeStarted} />
         </div>
+
+        {/* Questions List */}
       </div>
     </>
   )

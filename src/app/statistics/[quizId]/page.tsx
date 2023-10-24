@@ -11,6 +11,7 @@ import { buttonVariants } from '@/components/ui/button'
 
 // Custom Components
 import { AccuracyCard, ResultsCard, TimeTakenCard } from '@/components/Cards'
+import { QuestionsList } from '@/components/Lists'
 
 // Icons
 import { LucideLayoutDashboard } from 'lucide-react'
@@ -66,7 +67,7 @@ const StatisticsPage = async ({params: {quizId}}: Props) => {
           </div>
         </div>
 
-        <div className='grid gap-4 mt-4 md:grid-cols-7'>          
+        <div className='grid gap-4 mt-4 md:grid-cols-8'>          
           <ResultsCard accuracy={accuracy} />          
           <AccuracyCard accuracy={accuracy} />
 
@@ -74,7 +75,7 @@ const StatisticsPage = async ({params: {quizId}}: Props) => {
           <TimeTakenCard timeEnded={new Date()} timeStarted={quiz.timeStarted} />
         </div>
 
-        {/* Questions List */}
+        <QuestionsList questions={quiz.questions} />
       </div>
     </>
   )

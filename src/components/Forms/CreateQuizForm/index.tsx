@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -29,12 +29,19 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from '@/components/ui/separator'
 
+// Custom Components
+import Loading from '@/components/Loading'
+
 type Props = {}
 
 type Input = z.infer<typeof quizSchema>
 
 const CreateQuizForm = (props: Props) => {
   const router = useRouter()
+
+  const [showLoader, setShowLoader] = useState<boolean>(false)
+  const [finished, setFinished] = useState<boolean>(false)
+
   const {mutate: getQuestions, isLoading} = useMutation({
     mutationFn: async ({amount, topic, type}: Input) => {
       const response = await axios.post('/api/quiz', {
@@ -56,18 +63,24 @@ const CreateQuizForm = (props: Props) => {
   })
 
   const onSubmit = (input: Input) => {
+    setShowLoader(true)
     getQuestions({
       amount: input.amount,
       topic: input.topic,
       type: input.type
     }, {
       onSuccess: ({quizId}) => {
-        if (form.getValues("type") == "open_ended") {
-          router.push(`/play/open-ended/${quizId}`)
-        } else {
-          router.push(`/play/mcq/${quizId}`)
-        } 
-      }
+        setFinished(true)
+
+        setTimeout(() => {
+          if (form.getValues("type") == "open_ended") {
+            router.push(`/play/open-ended/${quizId}`)
+          } else {
+            router.push(`/play/mcq/${quizId}`)
+          }
+        }, 1000)
+      },
+      onError: () => setShowLoader(false)
     })
   }
 
@@ -81,6 +94,8 @@ const CreateQuizForm = (props: Props) => {
 
   // Rerenders form when state changes
   form.watch()
+
+  if (showLoader) return <Loading finished={finished}/>
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[400px]">

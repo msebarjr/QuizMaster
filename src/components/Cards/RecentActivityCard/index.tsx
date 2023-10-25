@@ -1,18 +1,39 @@
 import React from 'react'
+import { redirect } from 'next/navigation'
+import { getAuthSession } from '@/lib/nextauth'
 
 // shadcn Components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
+// Custom Components
+import HistoryComponent from '@/components/History'
+
+// Prisma
+import { prisma } from '@/lib/db'
+
 type Props = {}
 
-const RecentActivityCard = (props: Props) => {
+const RecentActivityCard = async (props: Props) => {
+  const session = await getAuthSession()
+
+  if (!session?.user) return redirect('/')
+
+  const quizCount = await prisma.quiz.count({
+    where: { userId: session.user.id }
+  })
+
   return (
     <Card className='col-span-4 lg:col-span-3'>
       <CardHeader>
         <CardTitle className='text-2xl font-bold'>Recent Activity</CardTitle>
-        <CardDescription>You have taken a total of 7 quizzes!</CardDescription>
+        <CardDescription>
+            <p>You have taken a total of {quizCount} quizzes!</p>
+            <p>Here are your 10 most recent quizzes!</p>
+          </CardDescription>
       </CardHeader>
-      <CardContent className='max-h-[580px] overflow-y-scroll'>History</CardContent>
+      <CardContent className='max-h-[580px] overflow-y-scroll'>
+        <HistoryComponent limit={10} userId={session.user.id} />
+      </CardContent>
     </Card>
   )
 }

@@ -4,6 +4,7 @@ import { getAuthSession } from '@/lib/nextauth'
 
 // shadcn Components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 
 // Custom Components
 import HistoryComponent from '@/components/History'
@@ -23,15 +24,16 @@ const RecentActivityCard = async (props: Props) => {
   })
 
   return (
-    <Card className='col-span-4 lg:col-span-3'>
+    <Card className='col-span-4'>
       <CardHeader>
         <CardTitle className='text-2xl font-bold'>Recent Activity</CardTitle>
-        <CardDescription>
+        <CardDescription className='flex flex-col gap-2'>
           <p>You have taken a total of {quizCount} quizzes!</p>
           <p>Here are your 10 most recent quizzes!</p>
+          <Separator orientation='horizontal' className='mt-2'/>
         </CardDescription>
       </CardHeader>
-      <CardContent className='max-h-[580px] overflow-y-scroll'>
+      <CardContent className='max-h-[500px] overflow-y-scroll'>
         <HistoryComponent limit={10} userId={session.user.id} />
       </CardContent>
     </Card>

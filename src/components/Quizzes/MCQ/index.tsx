@@ -79,6 +79,7 @@ const MCQ = ({quiz}: Props) => {
         }
 
         setQuestionIndex(prev => prev + 1)
+        setSelectedChoice(0)
       }
     })
   }, [checkAnswer, toast, isChecking, questionIndex, quiz.questions.length])

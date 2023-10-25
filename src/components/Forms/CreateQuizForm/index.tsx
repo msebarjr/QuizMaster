@@ -58,7 +58,7 @@ const CreateQuizForm = ({topicParam}: Props) => {
   const form = useForm<Input>({
     resolver: zodResolver(quizSchema),
     defaultValues: {
-      amount: 3, 
+      amount: 1, 
       topic: topicParam,
       type: 'mcq'
     }
@@ -132,10 +132,10 @@ const CreateQuizForm = ({topicParam}: Props) => {
                   <FormItem>
                     <FormLabel># of Questions</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter an amount..." {...field} type='number' min={1} max={10} onChange={onInputChange}/>
+                      <Input placeholder="Enter an amount..." {...field} type='number' min={1} max={3} onChange={onInputChange}/>
                     </FormControl>
                     <FormDescription>
-                      Between 1-10
+                      Between 1-3
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

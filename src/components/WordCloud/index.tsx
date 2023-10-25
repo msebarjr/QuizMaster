@@ -1,48 +1,27 @@
-// 'use client'
+'use client'
 
-// import React from 'react'
-// import { useTheme } from 'next-themes'
-// import WordCloud from 'react-d3-cloud'
-// import ReactWordcloud from 'react-wordcloud';
+import React from 'react'
+import { useTheme } from 'next-themes'
+import D3WordCloud from 'react-d3-cloud'
+import { useRouter } from 'next/navigation'
 
-// type Props = {}
+type Props = {
+  formattedTopics: { text: string, value: number }[]
+}
 
-// const data = [
-//   {
-//     text: 'Hey',
-//     value: 3,
-//   },
-//   {
-//     text: 'Hello',
-//     value: 5,
-//   },
-//   {
-//     text: 'Computer',
-//     value: 10,
-//   },
-//   {
-//     text: 'NextJS',
-//     value: 8,
-//   },
-//   {
-//     text: 'Live',
-//     value: 7,
-//   },
-// ]
+const fontSizeMapper = (word: {value: number}) => {
+  return Math.log2(word.value) * 5 + 16
+}
 
-// const fontSizeMapper = (word: {value: number}) => {
-//   return Math.log2(word.value) * 5 + 16
-// }
+const WordCloud = ({formattedTopics}: Props) => {
+  const theme = useTheme()
+  const router = useRouter()
 
-// const WordCloudComp = (props: Props) => {
-//   const theme = useTheme()
-//   return (
-//     <>
-//       {/* <D3WordCloud data={data} height={550} font='Times' fontSize={fontSizeMapper} rotate={0} padding={10} fill={theme.theme === 'dark' ? 'white' : 'black'} /> */}
-//       {/* <ReactWordcloud words={data} /> */}
-//       <WordCloud data={data} height={550} rotate={0} padding={10} font='Times' fill={theme.theme === 'dark' ? 'white' : 'black'} fontSize={fontSizeMapper}/>
-//     </>
-//   )
-// }
+  return (
+    <>
+      <D3WordCloud data={formattedTopics} height={550} font='Times' fontSize={fontSizeMapper} rotate={0} padding={10} onWordClick={(event, word) => {router.push(`/quiz?topic=${word.text}`)}} fill={theme.theme === 'dark' ? 'white' : 'black'} />    
+    </>
+  )
+}
 
-// export default WordCloudComp
+export default WordCloud

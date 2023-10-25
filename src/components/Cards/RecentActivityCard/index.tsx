@@ -27,9 +27,9 @@ const RecentActivityCard = async (props: Props) => {
       <CardHeader>
         <CardTitle className='text-2xl font-bold'>Recent Activity</CardTitle>
         <CardDescription>
-            <p>You have taken a total of {quizCount} quizzes!</p>
-            <p>Here are your 10 most recent quizzes!</p>
-          </CardDescription>
+          <p>You have taken a total of {quizCount} quizzes!</p>
+          <p>Here are your 10 most recent quizzes!</p>
+        </CardDescription>
       </CardHeader>
       <CardContent className='max-h-[580px] overflow-y-scroll'>
         <HistoryComponent limit={10} userId={session.user.id} />

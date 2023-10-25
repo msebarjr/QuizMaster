@@ -23,15 +23,15 @@ type openQuestion = {
 
 export const POST = async (req: Request, res: Response) => {
   try {
-    // const session = await getAuthSession()
+    const session = await getAuthSession()
 
-    // if (!session?.user) {
-    //   return NextResponse.json({
-    //     error: 'You must be logged in to create a quiz!'
-    //   }, {
-    //     status: 401
-    //   })
-    // }
+    if (!session?.user) {
+      return NextResponse.json({
+        error: 'You must be logged in to create a quiz!'
+      }, {
+        status: 401
+      })
+    }
 
     const body = await req.json()
     const { amount, topic, type } = quizSchema.parse(body)
@@ -40,8 +40,21 @@ export const POST = async (req: Request, res: Response) => {
       data: {
         quizType: type,
         timeStarted: new Date(),
-        userId: 'clnpa3e1a0000w4544y0070z7',
+        userId: session.user.id,
         topic,     
+      }
+    })
+
+    await prisma.topicCount.upsert({
+      where: { topic },
+      create: {
+        topic,
+        count: 1
+      },
+      update: {
+        count: {
+          increment: 1
+        }
       }
     })
 

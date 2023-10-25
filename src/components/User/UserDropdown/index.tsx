@@ -38,13 +38,7 @@ const UserAccount = ({user}: Props) => {
             {user.name && <p className='font-medium'>{user.name}</p>}
             {user.email && <p className='w-[200px] truncate text-sm text-zinc-700'>{user.email}</p>}
           </div>
-        </div>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href='/'>Meow</Link>
-        </DropdownMenuItem>
-        
+        </div>        
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className='text-red-600 cursor-pointer'>
           Sign Out

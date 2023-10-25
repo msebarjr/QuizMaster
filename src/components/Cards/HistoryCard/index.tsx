@@ -1,13 +1,13 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
 // Icons
 import { History } from 'lucide-react'
 
 // shadcn Components
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useRouter } from 'next/navigation'
 
 type Props = {}
 

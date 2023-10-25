@@ -32,11 +32,13 @@ import { Separator } from '@/components/ui/separator'
 // Custom Components
 import Loading from '@/components/Loading'
 
-type Props = {}
+type Props = {
+  topicParam: string
+}
 
 type Input = z.infer<typeof quizSchema>
 
-const CreateQuizForm = (props: Props) => {
+const CreateQuizForm = ({topicParam}: Props) => {
   const router = useRouter()
 
   const [showLoader, setShowLoader] = useState<boolean>(false)
@@ -57,7 +59,7 @@ const CreateQuizForm = (props: Props) => {
     resolver: zodResolver(quizSchema),
     defaultValues: {
       amount: 3, 
-      topic: '',
+      topic: topicParam,
       type: 'mcq'
     }
   })

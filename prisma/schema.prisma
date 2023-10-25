@@ -67,6 +67,12 @@ model Quiz {
   @@index([userId])
 }
 
+model TopicCount {
+  id    String @id @default(cuid())
+  topic String @unique
+  count Int
+}
+
 // Qame has many questions but each question only 1 Quiz
 model Question {
   id                String   @id @default(cuid())

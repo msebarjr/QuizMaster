@@ -5,19 +5,23 @@ import { redirect } from 'next/navigation'
 // Custom Components
 import { CreateQuizForm } from '@/components/Forms'
 
-type Props = {}
+type Props = {
+  searchParams: {
+    topic?: string
+  }
+}
 
 export const metadata = {
   title: 'Quiz | QuizMaster'
 }
 
-const QuizPage = async (props: Props) => {
+const QuizPage = async ({searchParams}: Props) => {
   const session = await getAuthSession()
 
   if (!session?.user) return redirect('/')
 
   return (
-    <CreateQuizForm />
+    <CreateQuizForm topicParam={searchParams.topic ?? ''}/>
   )
 }
 

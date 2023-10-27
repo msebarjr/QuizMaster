@@ -8,7 +8,8 @@ import { QuizMeCard, HistoryCard, HotTopicsCard, RecentActivityCard } from '@/co
 type Props = {}
 
 export const metadata = {
-  title: 'QuizMaster | Dashboard'
+  title: 'QuizMaster | Dashboard',
+  description: 'AI Powered Quizzes',
 }
 
 const Dashboard = async (props: Props) => {

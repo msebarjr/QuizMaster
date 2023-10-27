@@ -21,7 +21,7 @@ const AccuracyCard = ({accuracy}: Props) => {
       </CardHeader>
       <CardContent>
         <div className='text-sm font-medium'>
-          {accuracy.toString()}%
+          {!isNaN(accuracy) ? <p>{accuracy.toString()}%</p> : <p className='text-red-500'>No Data!</p>}
         </div>
       </CardContent>
     </Card>

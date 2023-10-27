@@ -14,7 +14,7 @@ type Props = {
 }
 
 const QuestionsList = ({questions}: Props) => {
-  let quizType = questions[0].questionType
+  let quizType = questions[0]?.questionType
 
   return (
     <Table className='mt-4'>

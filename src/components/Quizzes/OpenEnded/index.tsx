@@ -24,6 +24,7 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 
 // Custom Components
 import BlankAnswerInput from '@/components/BlankAnswerInput'
+import QuizError from '@/components/QuizError'
 
 type Props = {
   quiz: Quiz & {questions: Pick<Question, 'id' | 'question' | 'answer'>[]}
@@ -40,6 +41,8 @@ const OpenEnded = ({quiz}: Props) => {
   const currentQuestion = useMemo(() => {
     return quiz.questions[questionIndex]
   }, [questionIndex, quiz.questions])
+
+  if (!currentQuestion) return <QuizError />
 
   const {mutate: checkAnswer, isLoading: isChecking} = useMutation({
     mutationFn: async () => {
@@ -142,13 +145,13 @@ const OpenEnded = ({quiz}: Props) => {
             </div>
           </CardTitle>
           <CardDescription className='flex-grow text-lg'>
-            {currentQuestion.question}
+            {currentQuestion?.question}
           </CardDescription>
         </CardHeader>
       </Card>
 
       <div className="flex flex-col items-center justify-center w-full mt-4">
-        <BlankAnswerInput answer={currentQuestion.answer} setBlankAnswer={setBlankAnswer}/>
+        <BlankAnswerInput answer={currentQuestion?.answer} setBlankAnswer={setBlankAnswer}/>
         <Button className='mt-2' disabled={isChecking} onClick={handleNext}>
           {isChecking && <Loader2 className='w-4 h-4 mr-2 animated-spin' />}
           Next <ChevronRight className='w-4 h-4 ml-2' /></Button>

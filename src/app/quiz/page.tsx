@@ -12,7 +12,8 @@ type Props = {
 }
 
 export const metadata = {
-  title: 'Quiz | QuizMaster'
+  title: 'Quiz | QuizMaster',
+  description: 'AI Powered Quizzes',
 }
 
 const QuizPage = async ({searchParams}: Props) => {

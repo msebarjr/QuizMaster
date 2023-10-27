@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
 // Icons
-import { CopyCheck, BookOpen } from 'lucide-react'
+import { CopyCheck } from 'lucide-react'
 
 // Schemas
 import { quizSchema } from '@/schemas/form/quiz'
@@ -86,12 +86,8 @@ const CreateQuizForm = ({topicParam}: Props) => {
     })
   }
 
-  const onInputChange = (e: any) => {
-    form.setValue('amount', parseInt(e.target.value))
-  }
-
-  const onButtonChange = (type: 'mcq' | 'open_ended') => {
-    form.setValue('type', type)
+  const onButtonChange = (amount: 1 | 3 | 5) => {
+    form.setValue('amount', amount)
   }
 
   // Rerenders form when state changes
@@ -125,32 +121,25 @@ const CreateQuizForm = ({topicParam}: Props) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel># of Questions</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter an amount..." {...field} type='number' min={1} max={3} onChange={onInputChange}/>
-                    </FormControl>
-                    <FormDescription>
-                      Between 1-3
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-between">
-                <Button type='button' className='w-1/2 rounded-none rounded-l-lg' variant={form.getValues('type') === 'mcq' ? 'default' : 'secondary'} onClick={onButtonChange.bind(this, 'mcq')}>
-                  <CopyCheck className='w-4 h-4 mr-2' />Multiple Choice
-                </Button>
-                <Separator orientation='vertical'/>
-                <Button type='button' className='w-1/2 rounded-none rounded-r-lg' variant={form.getValues('type') === 'open_ended' ? 'default' : 'secondary'} onClick={onButtonChange.bind(this, 'open_ended')}>
-                  <BookOpen className='w-4 h-4 mr-2' />Open Ended
-                </Button>
+              <div className="flex flex-col gap-2">
+                <div>
+                  <p># of Questions</p>
+                </div>
+                <div className='flex'>
+                  <Button type='button' className='w-1/2 rounded-none rounded-l-lg' variant={form.getValues('amount') === 1 ? 'default' : 'secondary'} onClick={onButtonChange.bind(this, 1)}>
+                    <CopyCheck className='w-4 h-4 mr-2' />1
+                  </Button>
+                  <Separator orientation='vertical'/>
+                  <Button type='button' className='w-1/2 rounded-none rounded-r-lg' variant={form.getValues('amount') === 3 ? 'default' : 'secondary'} onClick={onButtonChange.bind(this, 3)}>
+                    <CopyCheck className='w-4 h-4 mr-2' />3
+                  </Button>
+                  <Separator orientation='vertical'/>
+                  <Button type='button' className='w-1/2 rounded-none rounded-r-lg' variant={form.getValues('amount') === 5 ? 'default' : 'secondary'} onClick={onButtonChange.bind(this, 5)}>
+                    <CopyCheck className='w-4 h-4 mr-2' />5
+                  </Button>
+                </div>
               </div>
-              <Button disabled={isLoading} type="submit">Submit</Button>
+              <Button className='w-full uppercase' disabled={isLoading} type="submit">Submit</Button>
             </form>
           </Form>
         </CardContent>

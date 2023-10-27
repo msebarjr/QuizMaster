@@ -45,8 +45,8 @@ const HistoryPage = async (props: Props) => {
             <p className='my-4'>You have taken a total of {quizCount} quizzes!</p>
             <Separator orientation='horizontal' />
           </CardDescription>
-        </CardHeader>
-        <CardContent className='max-h-[60vh] overflow-y-scroll'>
+        </CardHeader>        
+        <CardContent className={'max-h-[60vh] ' + (quizCount > 0 ? 'overflow-y-scroll' : '')}>
           <HistoryComponent limit={100} userId={session.user.id} />
         </CardContent>
       </Card>

@@ -9,6 +9,7 @@ import { Clock, CopyCheck, Edit2 } from 'lucide-react'
 
 // shadcn Components
 import { Separator } from '../ui/separator'
+import { getAccuracy } from '@/lib/utils'
 
 type Props = {
   limit: number,
@@ -20,13 +21,13 @@ const HistoryComponent = async ({limit, userId}: Props) => {
     where: { userId },
     take: limit,
     orderBy: { timeStarted: 'desc' }
-  })  
+  })
 
   return (
     <div className='space-y-8'>      
-      {quizzes.map(quiz => {
+      {quizzes.map(quiz => {        
         return (
-          <>
+          <>         
             <div className='flex items-center justify-between' key={quiz.id}>
               <div className='flex items-center'>
                 {quiz.quizType === 'mcq' ? <CopyCheck className='mr-3'/> : <Edit2 className='mr-3' />}

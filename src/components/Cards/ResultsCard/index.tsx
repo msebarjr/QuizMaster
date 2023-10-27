@@ -18,7 +18,7 @@ const ResultsCard = ({accuracy}: Props) => {
         <Award />
       </CardHeader>
       <CardContent className='flex flex-col items-center justify-center h-3/5'>
-        {accuracy >= 75 ? (
+        {!isNaN(accuracy) ? accuracy >= 75 ? (
           <>
             <Trophy className='mr-4' stroke='gold' size={50}/>
             <div className='flex flex-col text-2xl font-semibold text-yellow-400'>
@@ -42,7 +42,7 @@ const ResultsCard = ({accuracy}: Props) => {
               <span className='text-sm text-black text-center opacity-50'>{'< 50% accuracy'}</span>
             </div>
           </>
-        )}
+        ) : <p className='mb-4 text-red-500'>ChatGPT produced an error for this quiz!</p>}
       </CardContent>
     </Card>
   )

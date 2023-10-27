@@ -17,6 +17,7 @@ import { BarChart, ChevronRight, Loader2, Timer } from 'lucide-react'
 
 // Custom Components
 import { MCQCounter } from '@/components/Counters'
+import QuizError from '@/components/QuizError'
 
 // shadcn Components
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -40,6 +41,8 @@ const MCQ = ({quiz}: Props) => {
   const currentQuestion = useMemo(() => {
     return quiz.questions[questionIndex]
   }, [questionIndex, quiz.questions])
+
+  
 
   const {mutate: checkAnswer, isLoading: isChecking} = useMutation({
     mutationFn: async () => {
@@ -110,13 +113,15 @@ const MCQ = ({quiz}: Props) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [handleNext])
+  }, [handleNext]) 
 
   const options = useMemo(() => {
     if (!currentQuestion) return []
     if (!currentQuestion.options) return []
-    return JSON.parse(currentQuestion.options as string) as string[]
+    return JSON.parse(currentQuestion?.options as string) as string[]
   }, [currentQuestion])
+
+  if (!currentQuestion) return <QuizError />
 
   const handleSelectedOption = (index: number) => {
     setSelectedChoice(index)
@@ -159,7 +164,7 @@ const MCQ = ({quiz}: Props) => {
             </div>
           </CardTitle>
           <CardDescription className='flex-grow text-lg'>
-            {currentQuestion.question}
+            {currentQuestion?.question}
           </CardDescription>
         </CardHeader>
       </Card>

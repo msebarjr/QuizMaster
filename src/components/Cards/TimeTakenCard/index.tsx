@@ -12,10 +12,11 @@ import { formatTimeDelta } from '@/lib/utils'
 
 type Props = {
   timeStarted: Date,
-  timeEnded: Date
+  timeEnded: Date,
+  accuracy: number
 }
 
-const TimeTakenCard = ({timeEnded, timeStarted}: Props) => {
+const TimeTakenCard = ({timeEnded, timeStarted, accuracy}: Props) => {
   return (
     <Card className='md:col-span-4'>
       <CardHeader className='flex flex-row items-center justify-between pb-2 space-y-0'>
@@ -24,7 +25,7 @@ const TimeTakenCard = ({timeEnded, timeStarted}: Props) => {
       </CardHeader>
       <CardContent>
         <div className='text-sm font-medium'>
-          {formatTimeDelta(differenceInSeconds(timeEnded, timeStarted))}
+          {!isNaN(accuracy) ? formatTimeDelta(differenceInSeconds(timeEnded, timeStarted)) : <p className='text-red-500'>No Data!</p>}
         </div>
       </CardContent>
     </Card>

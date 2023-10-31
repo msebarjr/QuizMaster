@@ -74,12 +74,8 @@ const CreateQuizForm = ({topicParam}: Props) => {
       onSuccess: ({quizId}) => {
         setFinished(true)
 
-        setTimeout(() => {
-          if (form.getValues("type") == "open_ended") {
-            router.push(`/play/open-ended/${quizId}`)
-          } else {
-            router.push(`/play/mcq/${quizId}`)
-          }
+        setTimeout(() => {         
+            router.push(`/play/mcq/${quizId}`)          
         }, 1000)
       },
       onError: () => setShowLoader(false)

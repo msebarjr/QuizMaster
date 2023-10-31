@@ -24,31 +24,20 @@ export const POST = async (req: Request, res: Response) => {
   
     let questions: any
 
-    if (type === 'open_ended') {
-      questions = await strict_output(
-        'You are a helpful AI that is able to generate a pair of questions and answers, the length of the answer should not exceed 15 words, store all the pairs of answers and questions in a JSON array.',
-        new Array(amount).fill(
-          `You are to generate a random hard open-ended question about ${topic}`,
-        ),
-        {
-          question: 'question',
-          answer: 'answer with max length of 15 words'
-        }
-      )      
-    } else if (type === 'mcq') {
-      questions = await strict_output(
-        'You are a helpful AI that is able to generate a pair of questions and answers, the length of the answer should not exceed 15 words',
-        new Array(amount).fill(
-          `You are to generate a random hard multiple choice question about ${topic}`,
-        ),
-        {
-          question: 'question',
-          answer: 'answer with max length of 15 words',
-          option1: '1st option with max length of 15 words',
-          option2: '2nd option with max length of 15 words',
-          option3: '3rd option with max length of 15 words',
-        }
-      )
+   if (type === 'mcq') {
+    questions = await strict_output(
+      'You are a helpful AI that is able to generate a pair of questions and answers, the length of the answer should not exceed 15 words',
+      new Array(amount).fill(
+        `You are to generate a random hard multiple choice question about ${topic}`,
+      ),
+      {
+        question: 'question',
+        answer: 'answer with max length of 15 words',
+        option1: '1st option with max length of 15 words',
+        option2: '2nd option with max length of 15 words',
+        option3: '3rd option with max length of 15 words',
+      }
+     )
     }
 
     return NextResponse.json({

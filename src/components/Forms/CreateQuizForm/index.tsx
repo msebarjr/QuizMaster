@@ -95,7 +95,7 @@ const CreateQuizForm = ({topicParam}: Props) => {
   form.watch()
 
   if (showLoader) return <Loading finished={finished}/>
-  if (error) return <QuizError />
+  if (error) return <QuizError setError={true}/>
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[400px]">

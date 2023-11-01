@@ -6,9 +6,11 @@ import { buttonVariants } from '../ui/button'
 import { cn } from '@/lib/utils'
 
 
-type Props = {}
+type Props = {
+  setError: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-const QuizError = (props: Props) => {
+const QuizError = ({setError}: Props) => {
   return (
     <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px]'>
       <Card>
@@ -22,7 +24,7 @@ const QuizError = (props: Props) => {
           </CardDescription> 
         </CardHeader>
         <CardContent>       
-          <Link href='/quiz' className={cn(buttonVariants(), 'w-full')}>          
+          <Link href='/quiz' onClick={() => setError(false)} className={cn(buttonVariants(), 'w-full')}>          
             Try Again!
           </Link>
         </CardContent>

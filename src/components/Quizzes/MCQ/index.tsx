@@ -121,7 +121,7 @@ const MCQ = ({quiz}: Props) => {
     return JSON.parse(currentQuestion?.options as string) as string[]
   }, [currentQuestion])
 
-  if (!currentQuestion) return <QuizError />
+  if (!currentQuestion) return <QuizError setError={true}/>
 
   const handleSelectedOption = (index: number) => {
     setSelectedChoice(index)

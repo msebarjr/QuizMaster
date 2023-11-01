@@ -42,6 +42,7 @@ type Input = z.infer<typeof quizSchema>
 const CreateQuizForm = ({topicParam}: Props) => {
   const router = useRouter()
 
+  const [error, setError] = useState<boolean>(false)
   const [showLoader, setShowLoader] = useState<boolean>(false)
   const [finished, setFinished] = useState<boolean>(false)
 
@@ -81,7 +82,7 @@ const CreateQuizForm = ({topicParam}: Props) => {
       },
       onError: () => {
         setShowLoader(false)
-        return <QuizError />
+        setError(true)
       }
     })
   }
@@ -94,6 +95,7 @@ const CreateQuizForm = ({topicParam}: Props) => {
   form.watch()
 
   if (showLoader) return <Loading finished={finished}/>
+  if (error) return <QuizError />
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[400px]">

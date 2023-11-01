@@ -31,6 +31,7 @@ import { Separator } from '@/components/ui/separator'
 
 // Custom Components
 import Loading from '@/components/Loading'
+import QuizError from '@/components/QuizError'
 
 type Props = {
   topicParam: string
@@ -78,7 +79,10 @@ const CreateQuizForm = ({topicParam}: Props) => {
             router.push(`/play/mcq/${quizId}`)          
         }, 1000)
       },
-      onError: () => setShowLoader(false)
+      onError: () => {
+        setShowLoader(false)
+        return <QuizError />
+      }
     })
   }
 
